@@ -5,8 +5,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hornet.GUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Hornet" Height="800" Width="1280" HorizontalAlignment="Center" VerticalAlignment="Top">
+    <!--<Window.Background>
+        <ImageBrush ImageSource="/Images/logo.jpg" AlignmentX="Right" AlignmentY="Top" Stretch="None" />
+    </Window.Background>-->
+    <Window.Resources>
+        <Style x:Key="FilterButtons" TargetType="Button">
+            <Setter Property="DockPanel.Dock" Value="Left" />
+            <Setter Property="Margin" Value="5, 0, 0, 0" />
+            <Setter Property="Width" Value="70" />
+            <Setter Property="Height" Value="25" />
+        </Style>
+    </Window.Resources>
     <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Header="_Open" />
+                    <MenuItem Header="_Save" />
+                    <MenuItem Header="_Close" />
+                </MenuItem>
+                <MenuItem Header="_Edit">
+                    <MenuItem Header="Something..." />
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" />
+                </MenuItem>
+            </Menu>
+            <DockPanel>
+                <DockPanel LastChildFill="False" DockPanel.Dock="Top" Margin="5">
+                    <ComboBox Width="150" DockPanel.Dock="Left">
+                        <ComboBoxItem>Spanish materials</ComboBoxItem>
+                        <ComboBoxItem IsSelected="True">Swiss materials</ComboBoxItem>
+                        <ComboBoxItem>German materilas</ComboBoxItem>
+                    </ComboBox>
+                    <Label Content="Filters:" Margin="50, 0, 0, 0" DockPanel.Dock="Left" />
+                    <Button Content="CO2" Style="{StaticResource FilterButtons}" />
+                    <Button Content="filter 1" Style="{StaticResource FilterButtons}" />
+                    <Button Content="filter 2" Style="{StaticResource FilterButtons}" />
+                    <Button Content="filter 3" Style="{StaticResource FilterButtons}" />
+                </DockPanel>
+
+                <DockPanel LastChildFill="False" DockPanel.Dock="Bottom">
+                    <Button DockPanel.Dock="Left" Margin="5, 0, 0, 5">Something</Button>
+                    <Button DockPanel.Dock="Left" Margin="5, 0, 0, 5">something else</Button>
+                    <Button DockPanel.Dock="Right" Margin="5, 0, 5, 5">Exit</Button>
+                </DockPanel>
+
+                <TextBlock Text="center" Margin="5, 0, 5, 5" />
+            </DockPanel>
+        </DockPanel>
+        
         
     </Grid>
 </Window>
