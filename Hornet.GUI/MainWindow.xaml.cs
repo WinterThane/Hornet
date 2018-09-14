@@ -19,6 +19,8 @@ namespace Hornet.GUI
 {
     public partial class MainWindow : Window
     {
+        private DBConnect db = new DBConnect();
+
         public MainWindow()
         {
             InitializeComponent();          
@@ -42,20 +44,47 @@ namespace Hornet.GUI
         {
             SelectDBTextBlock.Visibility = DBselectComboBox.SelectedItem == null ? Visibility.Visible : Visibility.Hidden;
 
-            var db = new DBConnect();
-            List<SpanishMaterial> spanishData;
-            spanishData = db.SelectSpanishMaterials();
-            MainDataGrid.ItemsSource = spanishData;
+            var selected = ((ComboBoxItem)DBselectComboBox.SelectedItem).Content.ToString();
+
+            switch (selected)
+            {
+                case "Swiss materials":
+                    MessageBox.Show("Under construction.");
+                    break;
+                    
+                case "Spanish materials":
+                    List<SpanishMaterial> spanishData;
+                    spanishData = db.SelectSpanishMaterials("");
+                    MainDataGrid.ItemsSource = spanishData;
+
+                    List<string> groups = new List<string>();
+                    groups = db.SelectSpanishMaterialsGroups();
+                    GroupComboBox.ItemsSource = groups;
+                    GroupComboBox.IsEnabled = true;
+                    break;
+
+                case "German materilas":
+                    MessageBox.Show("Under construction.");
+                    break;
+
+                case "Alex's materilas":
+                    MessageBox.Show("Under construction.");
+                    break;
+
+                case "Alina's materilas":
+                    MessageBox.Show("Under construction.");
+                    break;
+            }
         }
 
-        private void MainDataGrid_Loaded(object sender, RoutedEventArgs e)
+        private void GroupComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //var db = new Data.DBConnect();
-            //DataTable spanishData;
-            //spanishData = db.SelectSpanishMaterials();
-            
-            //var grid = sender as DataGrid;
-            //grid.ItemsSource = spanishData;
+            SelectGroupTextBlock.Visibility = GroupComboBox.SelectedItem == null ? Visibility.Visible : Visibility.Hidden;
+
+            var selected = GroupComboBox.SelectedValue.ToString();
+            List<SpanishMaterial> spanishData;
+            spanishData = db.SelectSpanishMaterials(selected);
+            MainDataGrid.ItemsSource = spanishData;
         }
     }
 }

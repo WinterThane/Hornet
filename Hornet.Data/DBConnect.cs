@@ -52,9 +52,18 @@ namespace Hornet.Data
             }
         }
 
-        public List<SpanishMaterial> SelectSpanishMaterials()
+        // return all materials
+        public List<SpanishMaterial> SelectSpanishMaterials(string groupParam)
         {
-            var query = "SELECT * FROM spanish_material WHERE material_group = 'B01' ORDER BY short_description ASC";
+            var query = "SELECT * FROM spanish_material";
+            if (groupParam == "")
+            {
+                query += " ORDER BY short_description ASC";
+            }
+            else
+            {
+                query += " WHERE material_group = '" + groupParam + "' ORDER BY material_group ASC";
+            }
             var results = new List<SpanishMaterial>();
             
             if(OpenConnection() == true)
@@ -66,10 +75,42 @@ namespace Hornet.Data
                 {
                     results.Add(new SpanishMaterial
                     {
+                        MaterialGroup = dataReader["material_group"].ToString(),
                         ShortDescription = dataReader["short_description"].ToString(),
-                        CO2 = dataReader["co2"].ToString(),
-                        CO2Units = dataReader["co2_units"].ToString()
+                        CO2 = dataReader["co2"].ToString() + " " + dataReader["co2_units"].ToString(),
+                        MaterialPicture = dataReader["picture"].ToString(),
+                        Consumption = dataReader["energy_consumption"].ToString() + " " + dataReader["energy_units"].ToString(),
+                        RawMaterial = dataReader["raw_material"].ToString() + " " + dataReader["raw_material_units"].ToString(),
+                        PostRecycling = dataReader["post_recycling"].ToString() + " " + dataReader["post_recycling_units"].ToString(),
+                        PreRecycling = dataReader["pre_recycling"].ToString()
                     });
+                }
+
+                dataReader.Close();
+                CloseConnection();
+
+                return results;
+            }
+            else
+            {
+                return results;
+            }
+        }
+
+        // return distinct material groups
+        public List<string> SelectSpanishMaterialsGroups()
+        {
+            var query = "SELECT DISTINCT(material_group) FROM spanish_material ORDER BY material_group ASC";
+            var results = new List<string>();
+
+            if (OpenConnection() == true)
+            {
+                var cmd = new MySqlCommand(query, connection);
+                var dataReader = cmd.ExecuteReader();
+
+                while (dataReader.Read())
+                {
+                    results.Add(dataReader["material_group"] + "");
                 }
 
                 dataReader.Close();
