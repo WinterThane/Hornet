@@ -10,10 +10,11 @@
         <ImageBrush ImageSource="/Images/logo.jpg" AlignmentX="Right" AlignmentY="Top" Stretch="None" />
     </Window.Background>-->
     <Window.Resources>
-        <Style x:Key="FilterButtons" TargetType="Button">
+        <Style x:Key="PageButtons" TargetType="Button">
             <Setter Property="DockPanel.Dock" Value="Left" />
             <Setter Property="Margin" Value="5, 0, 0, 0" />
-            <Setter Property="Width" Value="70" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Width" Value="80" />
             <Setter Property="Height" Value="25" />
         </Style>
     </Window.Resources>
@@ -34,28 +35,32 @@
             </Menu>
             <DockPanel>
                 <DockPanel LastChildFill="False" DockPanel.Dock="Top" Margin="5">
-                    <ComboBox Width="150" DockPanel.Dock="Left">
+                    <ComboBox Name="DBselectComboBox" Width="150" DockPanel.Dock="Left" 
+                              SelectionChanged="CharacterClassesCB_SelectionChanged">
+                        <ComboBoxItem>Swiss materials</ComboBoxItem>
                         <ComboBoxItem>Spanish materials</ComboBoxItem>
-                        <ComboBoxItem IsSelected="True">Swiss materials</ComboBoxItem>
                         <ComboBoxItem>German materilas</ComboBoxItem>
+                        <ComboBoxItem>Alex's materilas</ComboBoxItem>
+                        <ComboBoxItem>Alina's materilas</ComboBoxItem>
                     </ComboBox>
+                    <TextBlock IsHitTestVisible="False" Name="SelectDBTextBlock" 
+                            Foreground="Gray" Text="-- Select Materials --" Margin="-135, 5, 0, 0" />
                     <Label Content="Filters:" Margin="50, 0, 0, 0" DockPanel.Dock="Left" />
-                    <Button Content="CO2" Style="{StaticResource FilterButtons}" />
-                    <Button Content="filter 1" Style="{StaticResource FilterButtons}" />
-                    <Button Content="filter 2" Style="{StaticResource FilterButtons}" />
-                    <Button Content="filter 3" Style="{StaticResource FilterButtons}" />
+                    <Button Content="CO2" Style="{StaticResource PageButtons}" />
+                    <Button Content="filter 1" Style="{StaticResource PageButtons}" />
+                    <Button Content="filter 2" Style="{StaticResource PageButtons}" />
+                    <Button Content="filter 3" Style="{StaticResource PageButtons}" />
                 </DockPanel>
 
-                <DockPanel LastChildFill="False" DockPanel.Dock="Bottom">
-                    <Button DockPanel.Dock="Left" Margin="5, 0, 0, 5">Something</Button>
-                    <Button DockPanel.Dock="Left" Margin="5, 0, 0, 5">something else</Button>
-                    <Button DockPanel.Dock="Right" Margin="5, 0, 5, 5">Exit</Button>
+                <DockPanel LastChildFill="False" DockPanel.Dock="Bottom" Margin="0, 5, 0, 5">
+                    <Button Content="Export" Style="{StaticResource PageButtons}" />
+                    <Button Content="Export many" Style="{StaticResource PageButtons}" />
+                    <Button Content="Exit" DockPanel.Dock="Right" Margin="5, 0, 5, 0" 
+                            Height="25" Width="80" FontWeight="Bold" Click="ExitBtn_Click" />
                 </DockPanel>
 
-                <TextBlock Text="center" Margin="5, 0, 5, 5" />
+                <DataGrid Name="MainDataGrid" Margin="5, 0, 5, 0" Loaded="MainDataGrid_Loaded" />
             </DockPanel>
         </DockPanel>
-        
-        
     </Grid>
 </Window>
