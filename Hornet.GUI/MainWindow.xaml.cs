@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,13 @@ namespace Hornet.GUI
     public partial class MainWindow : Window
     {
         private DBConnect db = new DBConnect();
+        private string selectedGroup = "";
+        private Brush defaultButtonColor;
 
         public MainWindow()
         {
-            InitializeComponent();          
+            InitializeComponent();
+            defaultButtonColor = CO2filter.Background;
         }
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
@@ -49,18 +53,24 @@ namespace Hornet.GUI
             switch (selected)
             {
                 case "Swiss materials":
-                    MessageBox.Show("Under construction.");
+                    SpanishDataGrid.Visibility = Visibility.Hidden;
+                    SwissDataTabControl.Visibility = Visibility.Visible;                 
                     break;
                     
                 case "Spanish materials":
                     List<SpanishMaterial> spanishData;
-                    spanishData = db.SelectSpanishMaterials("");
-                    MainDataGrid.ItemsSource = spanishData;
+                    spanishData = db.SelectSpanishMaterials("", true);
+                    SpanishDataGrid.ItemsSource = spanishData;
+                    SwissDataTabControl.Visibility = Visibility.Hidden;
+                    SpanishDataGrid.Visibility = Visibility.Visible;
 
                     List<string> groups = new List<string>();
                     groups = db.SelectSpanishMaterialsGroups();
                     GroupComboBox.ItemsSource = groups;
                     GroupComboBox.IsEnabled = true;
+                    SelectGroupTextBlock.Foreground = new SolidColorBrush(Colors.Black);
+                    CO2filter.IsEnabled = true;
+                    CO2filter.Background = defaultButtonColor;
                     break;
 
                 case "German materilas":
@@ -81,10 +91,37 @@ namespace Hornet.GUI
         {
             SelectGroupTextBlock.Visibility = GroupComboBox.SelectedItem == null ? Visibility.Visible : Visibility.Hidden;
 
-            var selected = GroupComboBox.SelectedValue.ToString();
+            selectedGroup = GroupComboBox.SelectedValue.ToString();
             List<SpanishMaterial> spanishData;
-            spanishData = db.SelectSpanishMaterials(selected);
-            MainDataGrid.ItemsSource = spanishData;
+            spanishData = db.SelectSpanishMaterials(selectedGroup, true);
+            SpanishDataGrid.ItemsSource = spanishData;
+            CO2filter.Background = defaultButtonColor;
+        }
+
+        private void CO2filter_Click(object sender, RoutedEventArgs e)
+        {
+            if(CO2filter.Background == defaultButtonColor)
+            {
+                List<SpanishMaterial> spanishData;
+                spanishData = db.SelectSpanishMaterials(selectedGroup, false);
+                SpanishDataGrid.ItemsSource = spanishData;
+                CO2filter.Background = Brushes.LightGreen;
+            }
+            else
+            {
+                List<SpanishMaterial> spanishData;
+                spanishData = db.SelectSpanishMaterials(selectedGroup, true);
+                SpanishDataGrid.ItemsSource = spanishData;
+                CO2filter.Background = defaultButtonColor;
+            }
+
+            
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            e.Handled = true;
         }
     }
 }

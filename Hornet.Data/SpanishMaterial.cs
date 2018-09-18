@@ -11,5 +11,12 @@
         public string RawMaterial { get; set; }
         public string PostRecycling { get; set; }
         public string PreRecycling { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyPicture { get; set; }
+        public string Price { get; set; }
+        public string PriceUnits { get; set; }
+        public string LongDescription { get; set; }
+        public string WebPageLing { get; set; }
+        public string LifeCycleScope { get; set; }
     }
 }

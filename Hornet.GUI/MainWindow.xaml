@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Hornet.GUI"
         mc:Ignorable="d"
-        Title="Hornet" Height="800" Width="1280" HorizontalAlignment="Center" VerticalAlignment="Center">
+        Title="Hornet" Height="800" Width="1280" WindowStartupLocation="CenterScreen" SizeToContent="Width">
     <!--<Window.Background>
         <ImageBrush ImageSource="/Images/logo.jpg" AlignmentX="Right" AlignmentY="Top" Stretch="None" />
     </Window.Background>-->
@@ -14,8 +14,9 @@
             <Setter Property="DockPanel.Dock" Value="Left" />
             <Setter Property="Margin" Value="5, 0, 0, 0" />
             <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="Width" Value="80" />
+            <Setter Property="Padding" Value="5, 0, 5, 0" />
             <Setter Property="Height" Value="25" />
+            <Setter Property="MinWidth" Value="75" />
         </Style>
         <Style x:Key="DataGridLabels" TargetType="TextBlock">
             <Setter Property="Margin" Value="5, 0, 0, 5" />
@@ -50,16 +51,17 @@
                         <ComboBoxItem>Alex's materilas</ComboBoxItem>
                         <ComboBoxItem>Alina's materilas</ComboBoxItem>
                     </ComboBox>
-                    <TextBlock IsHitTestVisible="False" Name="SelectDBTextBlock" 
-                            Foreground="Gray" Text="-- Select Materials --" Margin="-135, 5, 0, 0" />
+                    <TextBlock IsHitTestVisible="False" Name="SelectDBTextBlock" FontWeight="Bold"
+                            Text="-- Select Materials --" Margin="-135, 5, 0, 0" />
                     <Label Content="Filters:" Margin="50, 0, 0, 0" DockPanel.Dock="Left" />
                     <ComboBox Name="GroupComboBox" Width="150" DockPanel.Dock="Left" 
                               IsEnabled="False" SelectionChanged="GroupComboBox_SelectionChanged" />
-                    <Button Name="CO2filter" Content="CO2" Style="{StaticResource PageButtons}" IsEnabled="False" />
+                    <Button Name="CO2filter" Content="CO2" Style="{StaticResource PageButtons}" 
+                            IsEnabled="False" Click="CO2filter_Click" />
                     <Button Content="filter 1" Style="{StaticResource PageButtons}" IsEnabled="False" />
                     <Button Content="filter 2" Style="{StaticResource PageButtons}" IsEnabled="False" />
-                    <TextBlock IsHitTestVisible="False" Name="SelectGroupTextBlock" 
-                            Foreground="Gray" Text="-- Select Group --" Margin="-380, 5, 0, 0" />
+                    <TextBlock IsHitTestVisible="False" Name="SelectGroupTextBlock" FontWeight="Bold" 
+                            Foreground="Gray" Text="-- Select Group --" Margin="-370, 5, 0, 0" />
                 </DockPanel>
 
                 <DockPanel LastChildFill="False" DockPanel.Dock="Bottom" Margin="0, 5, 0, 5">
@@ -68,51 +70,124 @@
                     <Button Content="Exit" DockPanel.Dock="Right" Margin="5, 0, 5, 0" 
                             Height="25" Width="80" FontWeight="Bold" Click="ExitBtn_Click" />
                 </DockPanel>
+                <!--Tables-->
+                <Grid>
+                    <!--Swiss data-->
+                    <TabControl Name="SwissDataTabControl" Visibility="Hidden" HorizontalAlignment="Left" Margin="5, 0, 5, 0">
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Building materials" Foreground="LightBlue" />
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Label Content="Building materials data goes here..." />
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Building services" Foreground="Red" />
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Label Content="Building services data goes here..." />
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Energy" Foreground="Green" />
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Label Content="Energy data goes here..." />
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Transport" Foreground="Orange" />
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Label Content="Transport data goes here..." />
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Disposal" Foreground="DarkBlue" />
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Label Content="Disposal data goes here..." />
+                        </TabItem>
+                    </TabControl>
+                
+                    <!--Spanish data-->
+                    <DataGrid Name="SpanishDataGrid" Margin="5, 0, 5, 0" IsReadOnly="True" AutoGenerateColumns="False" 
+                              HorizontalAlignment="Left" AlternatingRowBackground="Gainsboro" AlternationCount="2" 
+                              SelectionUnit="FullRow" Width="1210" Visibility="Hidden">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Group" Binding="{Binding MaterialGroup}" />
+                            <DataGridTextColumn Header="Short Description" Binding="{Binding ShortDescription}" Width="600" />
+                            <DataGridTextColumn Header="CO2" Binding="{Binding CO2}" Width="80" />
+                            <DataGridTextColumn Header="Company" Binding="{Binding CompanyName}" Width="255" />
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="80" />
 
-                <DataGrid Name="MainDataGrid" Margin="5, 0, 5, 0" IsReadOnly="True" AutoGenerateColumns="False"
-                          AlternatingRowBackground="Gainsboro" AlternationCount="2" SelectionUnit="FullRow">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Group" Binding="{Binding MaterialGroup}" />
-                        <DataGridTextColumn Header="Short Description" Binding="{Binding ShortDescription}" Width="500" />
-                        <DataGridTextColumn Header="CO2" Binding="{Binding CO2}" />
-                        <!--<DataGridTextColumn Header="Units" Binding="{Binding CO2Units}" CanUserSort="False" />-->
-                    </DataGrid.Columns>
-                    <DataGrid.RowDetailsTemplate>
-                        <DataTemplate>
-                            <!--<Image Height="100" Source="{Binding MaterialPicture}" />-->
-                            <DockPanel Background="GhostWhite">
-                                <Image Height="200" Source="{Binding MaterialPicture}" />
-                                <Grid Margin="0,10">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="Energy Consumption:" Style="{StaticResource DataGridLabels}" Grid.Row="0" />
-                                    <TextBlock Text="{Binding Consumption}" Grid.Column="1" Style="{StaticResource DataGridData}" />
-                                    <TextBlock Text="CO2:" Style="{StaticResource DataGridLabels}" Grid.Row="1" />
-                                    <TextBlock Text="{Binding CO2}" Grid.Column="1" Grid.Row="1" Style="{StaticResource DataGridData}" />
-                                    <TextBlock Text="Raw material:" Style="{StaticResource DataGridLabels}" Grid.Row="2" />
-                                    <TextBlock Text="{Binding RawMaterial}" Grid.Column="1" Grid.Row="2" Style="{StaticResource DataGridData}" />
+                            <!--<DataGridTextColumn Header="Units" Binding="{Binding CO2Units}" CanUserSort="False" />-->
+                        </DataGrid.Columns>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <!--<Image Height="100" Source="{Binding MaterialPicture}" />-->
+                                <DockPanel Background="GhostWhite">
+                                    <Image Height="200" Source="{Binding MaterialPicture}" MaxWidth="300" Margin="5" />
+                                    <Grid Margin="0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="125" />
+                                            <ColumnDefinition Width="150" />
+                                            <ColumnDefinition Width="200" />
+                                            <ColumnDefinition Width="400" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding CompanyName}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" 
+                                                   Style="{StaticResource DataGridData}" Margin="5" />
+                                        <TextBlock Text="Energy Consumption:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="1" />
+                                        <TextBlock Text="{Binding Consumption}" Grid.Column="1" Grid.Row="1" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="CO2:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="2" />
+                                        <TextBlock Text="{Binding CO2}" Grid.Column="1" Grid.Row="2" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="Raw material:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="3" />
+                                        <TextBlock Text="{Binding RawMaterial}" Grid.Column="1" Grid.Row="3" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="Post recycling:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="4" />
+                                        <TextBlock Text="{Binding PostRecycling}" Grid.Column="1" Grid.Row="4" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="Pre recycling:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="5" />
+                                        <TextBlock Text="{Binding PreRecycling}" Grid.Column="1" Grid.Row="5" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="Life cycle scope:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="6" />
+                                        <TextBlock Text="{Binding LifeCycleScope}" Grid.Column="1" Grid.Row="6" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="Price:" Style="{StaticResource DataGridLabels}" Grid.Column="0" Grid.Row="7" />
+                                        <TextBlock Text="{Binding Price}" Grid.Column="1" Grid.Row="7" Style="{StaticResource DataGridData}" />
 
-                                    <TextBlock Text="Post recycling:" Style="{StaticResource DataGridLabels}" Grid.Row="3" />
-                                    <TextBlock Text="{Binding PostRecycling}" Grid.Column="1" Grid.Row="3" Style="{StaticResource DataGridData}" />
+                                        <Image Source="{Binding CompanyPicture}" Grid.Column="2" Grid.Row="0" Grid.RowSpan="5" 
+                                               Height="100" Margin="0, 0, 10, 0" />
 
-                                    <TextBlock Text="Pre recycling:" Style="{StaticResource DataGridLabels}" Grid.Row="4" />
-                                    <TextBlock Text="{Binding PreRecycling}" Grid.Column="1" Grid.Row="4" Style="{StaticResource DataGridData}" />
-
-                                </Grid>
-                            </DockPanel>
-                        </DataTemplate>
-                    </DataGrid.RowDetailsTemplate>
-                </DataGrid>
+                                        <TextBlock Text="Description:" Grid.Column="3" Grid.Row="0" Style="{StaticResource DataGridData}" />
+                                        <TextBlock Text="{Binding LongDescription}" Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" TextWrapping="Wrap" />
+                                        <TextBlock Text="Web page link:" Grid.Column="3" Grid.Row="4" 
+                                                   Style="{StaticResource DataGridData}" Margin="0, 10, 0, 0" />
+                                        <TextBlock Grid.Column="3" Grid.Row="5">
+                                            <Hyperlink NavigateUri="{Binding WebPageLing}" RequestNavigate="Hyperlink_RequestNavigate">
+                                                <Hyperlink.Inlines>
+                                                    <Run Text="{Binding WebPageLing}" />
+                                                </Hyperlink.Inlines>
+                                            </Hyperlink>
+                                        </TextBlock>
+                                    </Grid>
+                                </DockPanel>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                    </DataGrid>
+                </Grid>
             </DockPanel>
         </DockPanel>
     </Grid>
